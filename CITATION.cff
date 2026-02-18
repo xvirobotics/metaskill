@@ -1,0 +1,27 @@
+cff-version: 1.2.0
+message: "If you use Metaskill in your research, please cite it as below."
+title: "Metaskill: A Meta-Skill for Autonomous AI Agent Team Generation"
+authors:
+  - family-names: Sung
+    given-names: Flood
+    affiliation: XVI Robotics
+type: software
+license: MIT
+url: "https://github.com/xvirobotics/metaskill"
+repository-code: "https://github.com/xvirobotics/metaskill"
+keywords:
+  - ai-agents
+  - multi-agent-systems
+  - claude-code
+  - meta-learning
+  - agent-generation
+  - mcp
+  - model-context-protocol
+  - autonomous-agents
+abstract: >-
+  Metaskill is a single Claude Code skill that autonomously researches any
+  domain via web search, then generates a complete, ready-to-use AI agent
+  team configuration (.claude/ directory with orchestrator, specialist agents,
+  skills, rules, and MCP servers). It is a "skill that creates skills" —
+  one prompt to bootstrap an entire autonomous development team.
+date-released: "2025-02-18"
