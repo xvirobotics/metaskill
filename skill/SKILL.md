@@ -294,16 +294,31 @@ Create `.mcp.json` with MCP servers relevant to the project. Use this format:
 }
 ```
 
-Select servers based on your research findings. Here is a reference catalog of commonly useful MCP servers:
+Select servers based on your research findings. Here is the **verified catalog** of real MCP servers with correct npm package names:
 
-| Server | Package | Purpose | Best For |
-|--------|---------|---------|----------|
-| context7 | `@upstash/context7-mcp@latest` | Up-to-date library docs | Any project using external libraries |
-| filesystem | `@anthropic-ai/mcp-filesystem` | Enhanced file operations | Projects with complex file structures |
-| playwright | `@anthropic-ai/mcp-playwright` | Browser automation & testing | Web projects |
-| postgres | `@anthropic-ai/mcp-postgres` | Database operations | Projects with PostgreSQL |
-| sequential-thinking | `@anthropic-ai/mcp-sequential-thinking` | Structured reasoning | Complex problem-solving |
-| github | HTTP: `https://api.githubcopilot.com/mcp/` | GitHub API access | Any project on GitHub |
+| Server | Package | Args Example | Purpose | Best For |
+|--------|---------|-------------|---------|----------|
+| context7 | `@upstash/context7-mcp@latest` | `["-y", "@upstash/context7-mcp@latest"]` | Up-to-date library docs | Any project using external libraries |
+| filesystem | `@modelcontextprotocol/server-filesystem` | `["-y", "@modelcontextprotocol/server-filesystem", "/path/to/allowed"]` | Enhanced file operations | Projects with complex file structures |
+| playwright | `@playwright/mcp@latest` | `["-y", "@playwright/mcp@latest"]` | Browser automation & testing | Web projects (by Microsoft) |
+| postgres | `@modelcontextprotocol/server-postgres` | `["-y", "@modelcontextprotocol/server-postgres", "postgresql://user:pass@host:5432/db"]` | Database operations | Projects with PostgreSQL |
+| sequential-thinking | `@modelcontextprotocol/server-sequential-thinking` | `["-y", "@modelcontextprotocol/server-sequential-thinking"]` | Structured reasoning | Complex problem-solving |
+| memory | `@modelcontextprotocol/server-memory` | `["-y", "@modelcontextprotocol/server-memory"]` | Persistent knowledge graph | Projects needing cross-session memory |
+| github | HTTP transport | N/A (see below) | GitHub API access | Any project on GitHub |
+
+**GitHub MCP server** uses HTTP transport, not stdio. Configure it as:
+```json
+{
+  "mcpServers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    }
+  }
+}
+```
+
+**CRITICAL: Only use packages from this catalog or packages you have verified exist via web search during Phase 1.** The `@anthropic-ai/mcp-*` scope does NOT publish MCP servers — do NOT use it. All official MCP servers are under the `@modelcontextprotocol/` scope. Do NOT invent or guess package names.
 
 Only include servers that are genuinely useful for this team type. Don't add servers just to have more — each one should serve a clear purpose.
 
@@ -345,15 +360,13 @@ After collecting credentials, update the `.mcp.json` file to fill in the actual 
   "mcpServers": {
     "postgres": {
       "command": "npx",
-      "args": ["-y", "@anthropic-ai/mcp-postgres", "postgresql://user:pass@host:5432/db"],
+      "args": ["-y", "@modelcontextprotocol/server-postgres", "postgresql://user:pass@host:5432/db"],
       "env": {}
     },
-    "some-service": {
+    "context7": {
       "command": "npx",
-      "args": ["-y", "@some/mcp-server"],
-      "env": {
-        "API_KEY": "user-provided-key-here"
-      }
+      "args": ["-y", "@upstash/context7-mcp@latest"],
+      "env": {}
     }
   }
 }
@@ -372,7 +385,7 @@ For stdio MCP servers that use `npx -y`, you can optionally pre-download the pac
 
 ```bash
 npx -y @upstash/context7-mcp@latest --help 2>/dev/null || true
-npx -y @anthropic-ai/mcp-filesystem --help 2>/dev/null || true
+npx -y @modelcontextprotocol/server-filesystem --help 2>/dev/null || true
 ```
 
 This is best-effort — if it fails, it's fine. `npx -y` will download on first use anyway.
@@ -450,6 +463,7 @@ cat .mcp.json | python3 -m json.tool > /dev/null && echo "Valid JSON" || echo "I
 7. **Agents should be focused.** One agent = one domain of expertise. Resist making "do everything" agents.
 8. **Skills use dynamic context.** Use `!`backtick`` syntax to inject live project state where it adds value.
 9. **Don't over-configure MCP servers.** Only include what's genuinely useful for this team type.
+13. **Only use verified MCP packages.** NEVER invent or guess npm package names. Only use packages from the verified catalog above, or packages you confirmed exist via web search in Phase 1. The `@anthropic-ai/mcp-*` scope does NOT exist — all official servers are `@modelcontextprotocol/server-*`.
 10. **Respect existing folders.** If a folder with the same name already exists, ask the user before overwriting. Suggest a different name or offer to merge.
 11. **Validate frontmatter.** Every agent and skill must have valid YAML frontmatter with at minimum `name` and `description`.
 12. **Init git.** Run `git init` inside the project folder so it's a proper repo from the start.

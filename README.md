@@ -176,16 +176,17 @@ Every generated team follows this pattern:
 
 ## MCP Server Catalog
 
-Metaskill selects MCP servers based on your domain. Commonly used:
+Metaskill selects MCP servers based on your domain. Verified catalog:
 
-| Server | Purpose | Transport |
-|--------|---------|-----------|
-| `context7` | Up-to-date library docs | stdio |
-| `playwright` | Browser automation & e2e testing | stdio |
-| `filesystem` | Enhanced file operations | stdio |
-| `postgres` | Database queries | stdio |
-| `sequential-thinking` | Structured multi-step reasoning | stdio |
-| `github` | GitHub API access | HTTP |
+| Server | Package | Purpose | Transport |
+|--------|---------|---------|-----------|
+| `context7` | `@upstash/context7-mcp@latest` | Up-to-date library docs | stdio |
+| `playwright` | `@playwright/mcp@latest` | Browser automation & e2e testing | stdio |
+| `filesystem` | `@modelcontextprotocol/server-filesystem` | Enhanced file operations | stdio |
+| `postgres` | `@modelcontextprotocol/server-postgres` | Database queries | stdio |
+| `sequential-thinking` | `@modelcontextprotocol/server-sequential-thinking` | Structured multi-step reasoning | stdio |
+| `memory` | `@modelcontextprotocol/server-memory` | Persistent knowledge graph | stdio |
+| `github` | `https://api.githubcopilot.com/mcp/` | GitHub API access | HTTP |
 
 All servers are written to `.mcp.json` and auto-discovered by Claude Code on launch. No `claude mcp add` needed.
 
