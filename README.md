@@ -4,24 +4,57 @@
 
 **One skill to generate them all.**
 
-Metaskill is a single [Claude Code](https://claude.ai/code) skill that:
+Metaskill is a suite of [Claude Code](https://claude.ai/code) skills for creating and managing AI agent teams:
 
-1. **Researches** your domain via web search — real team structures, best practices, available MCP servers
-2. **Generates** a complete `.claude/` agent team — orchestrator, specialists, skills, rules, MCP config
-3. **Bootstraps** a ready-to-use project folder you can `cd` into and start building
+| Skill | Purpose |
+|-------|---------|
+| `/metaskill` | Research a domain, then generate a complete `.claude/` agent team (orchestrator + specialists + skills + rules + MCP) |
+| `/create-agent` | Create a single custom Claude Code subagent with well-designed frontmatter and system prompt |
+| `/create-skill` | Create a single custom Claude Code skill (slash command) with proper configuration |
 
 ```bash
+# Generate a full agent team for a project
 /metaskill ios app with SwiftUI
 /metaskill fullstack web app with React and PostgreSQL
 /metaskill data science pipeline with PyTorch
 /metaskill game dev with Unity and C#
+
+# Create individual agents and skills
+/create-agent security reviewer for Go microservices
+/create-skill deploy to staging with Docker
 ```
 
-Each command creates a self-contained project with a full AI team inside it.
+`/metaskill` creates a self-contained project with a full AI team inside it. `/create-agent` and `/create-skill` let you add individual components to any existing project.
+
+---
+
+## Skills Overview
+
+### `/metaskill` — Team Generator
+
+Runs in 4 phases (research → build → credentials → verify) to create an entire agent team from scratch. See [How It Works](#how-it-works) below.
+
+### `/create-agent` — Agent Builder
+
+Interactively creates a single `.claude/agents/<name>.md` file. Guides you through:
+- Scope selection (project-level vs user-level)
+- Expert persona design
+- Frontmatter configuration (model, tools, permissions)
+- System prompt authoring with self-verification steps
+
+### `/create-skill` — Skill Builder
+
+Interactively creates a single `.claude/skills/<name>/SKILL.md` file. Guides you through:
+- Scope and invocation model (user-invocable, auto-invocable, or both)
+- Execution context (main conversation vs forked)
+- Dynamic context injection with shell commands
+- Argument handling and tool access
 
 ---
 
 ## What Gets Generated
+
+> The following applies to `/metaskill`. For `/create-agent` and `/create-skill`, a single file is generated interactively.
 
 ```
 ios-app-agents/
@@ -59,12 +92,22 @@ The `tech-lead` agent breaks the task down and delegates to specialists. You sup
 curl -fsSL https://raw.githubusercontent.com/xvirobotics/metaskill/main/install.sh | bash
 ```
 
+This installs all three skills (`/metaskill`, `/create-agent`, `/create-skill`) to `~/.claude/skills/`.
+
 Or manually:
 
 ```bash
-mkdir -p ~/.claude/skills/metaskill
+# Install all skills
+mkdir -p ~/.claude/skills/{metaskill,create-agent,create-skill}
+
 curl -fsSL https://raw.githubusercontent.com/xvirobotics/metaskill/main/skill/SKILL.md \
   -o ~/.claude/skills/metaskill/SKILL.md
+
+curl -fsSL https://raw.githubusercontent.com/xvirobotics/metaskill/main/skills/create-agent/SKILL.md \
+  -o ~/.claude/skills/create-agent/SKILL.md
+
+curl -fsSL https://raw.githubusercontent.com/xvirobotics/metaskill/main/skills/create-skill/SKILL.md \
+  -o ~/.claude/skills/create-skill/SKILL.md
 ```
 
 **Requirements:** [Claude Code](https://claude.ai/code) CLI installed and authenticated.
@@ -158,14 +201,26 @@ See the [`examples/`](examples/) directory:
 
 ---
 
+## Project Structure
+
+| File | Description |
+|------|-------------|
+| [`skill/SKILL.md`](skill/SKILL.md) | `/metaskill` — the team generator skill |
+| [`skills/create-agent/SKILL.md`](skills/create-agent/SKILL.md) | `/create-agent` — single agent builder |
+| [`skills/create-skill/SKILL.md`](skills/create-skill/SKILL.md) | `/create-skill` — single skill builder |
+| [`install.sh`](install.sh) | Installer for all three skills |
+| [`examples/`](examples/) | Example generated outputs |
+
+---
+
 ## Contributing
 
-PRs welcome. The entire skill is a single file: [`skill/SKILL.md`](skill/SKILL.md).
+PRs welcome. Each skill is a single markdown file — edit directly and test.
 
-To improve it:
+To improve:
 1. Fork the repo
-2. Edit `skill/SKILL.md`
-3. Test with `/metaskill <your-domain>` in Claude Code
+2. Edit the relevant `SKILL.md`
+3. Test in Claude Code (`/metaskill`, `/create-agent`, or `/create-skill`)
 4. Submit a PR with a before/after example
 
 ---
