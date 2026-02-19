@@ -1,5 +1,7 @@
 # Metaskill
 
+![Metaskill: Instant AI Agent Teams for Any Project](resources/image.png)
+
 **One skill to generate them all.**
 
 Metaskill is a single [Claude Code](https://claude.ai/code) skill that:
