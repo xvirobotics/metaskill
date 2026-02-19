@@ -318,7 +318,7 @@ Select servers based on your research findings. Here is the **verified catalog**
 }
 ```
 
-**CRITICAL: Only use packages from this catalog or packages you have verified exist via web search during Phase 1.** The `@anthropic-ai/mcp-*` scope does NOT publish MCP servers — do NOT use it. All official MCP servers are under the `@modelcontextprotocol/` scope. Do NOT invent or guess package names.
+**CRITICAL: Only use packages from this verified catalog or packages you have confirmed exist via web search during Phase 1.** Do NOT invent or guess package names.
 
 Only include servers that are genuinely useful for this team type. Don't add servers just to have more — each one should serve a clear purpose.
 
@@ -463,7 +463,7 @@ cat .mcp.json | python3 -m json.tool > /dev/null && echo "Valid JSON" || echo "I
 7. **Agents should be focused.** One agent = one domain of expertise. Resist making "do everything" agents.
 8. **Skills use dynamic context.** Use `!`backtick`` syntax to inject live project state where it adds value.
 9. **Don't over-configure MCP servers.** Only include what's genuinely useful for this team type.
-13. **Only use verified MCP packages.** NEVER invent or guess npm package names. Only use packages from the verified catalog above, or packages you confirmed exist via web search in Phase 1. The `@anthropic-ai/mcp-*` scope does NOT exist — all official servers are `@modelcontextprotocol/server-*`.
+13. **Only use verified MCP packages.** NEVER invent or guess npm package names. Only use packages from the verified catalog in Phase 2 File 5, or packages you confirmed exist via web search in Phase 1.
 10. **Respect existing folders.** If a folder with the same name already exists, ask the user before overwriting. Suggest a different name or offer to merge.
 11. **Validate frontmatter.** Every agent and skill must have valid YAML frontmatter with at minimum `name` and `description`.
 12. **Init git.** Run `git init` inside the project folder so it's a proper repo from the start.
