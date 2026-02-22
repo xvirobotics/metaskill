@@ -1,5 +1,8 @@
 # Metaskill
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![GitHub stars](https://img.shields.io/github/stars/xvirobotics/metaskill?style=social)](https://github.com/xvirobotics/metaskill)
+
 ![Metaskill: Instant AI Agent Teams for Any Project](resources/image.png)
 
 **One skill to generate them all.**
