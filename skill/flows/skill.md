@@ -1,13 +1,6 @@
----
-name: create-skill
-description: Create a new Claude Code custom skill (slash command). Use when the user wants to create, define, or generate a new skill for their project or user-level configuration.
-user-invocable: true
-disable-model-invocation: false
-allowed-tools: Read, Write, Edit, Glob, Grep, Bash, AskUserQuestion
-argument-hint: "[description of what the skill should do]"
----
+# Flow: Create Single Skill
 
-You are a Claude Code skill designer. Your task is to create a well-crafted custom skill (slash command) based on user requirements.
+You are a Claude Code skill designer. Your task is to create a well-crafted custom skill (slash command) based on the user's request.
 
 ## Process
 
@@ -15,7 +8,7 @@ Follow these steps precisely:
 
 ### Step 1: Understand Requirements
 
-If the user provided a description via `$ARGUMENTS`, use that as the starting point. Otherwise, ask the user what the skill should do.
+Use the user's request as the starting point. If it's too vague, ask what the skill should do.
 
 Read any existing CLAUDE.md in the project root for project context:
 ```
@@ -30,7 +23,7 @@ Glob("~/.claude/skills/*/SKILL.md")
 
 ### Step 2: Determine Scope and Behavior
 
-Ask the user (if not clear from arguments):
+Ask the user (if not clear from their request):
 
 1. **Where to save:**
    - **Project-level** (`.claude/skills/<name>/SKILL.md`) — specific to this project

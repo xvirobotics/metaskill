@@ -5,15 +5,9 @@
 
 ![Metaskill: Instant AI Agent Teams for Any Project](resources/image.png)
 
-**One skill to generate them all.**
+**One skill to create them all.**
 
-Metaskill is a suite of [Claude Code](https://claude.ai/code) skills for creating and managing AI agent teams:
-
-| Skill | Purpose |
-|-------|---------|
-| `/metaskill` | Research a domain, then generate a complete `.claude/` agent team (orchestrator + specialists + skills + rules + MCP) |
-| `/create-agent` | Create a single custom Claude Code subagent with well-designed frontmatter and system prompt |
-| `/create-skill` | Create a single custom Claude Code skill (slash command) with proper configuration |
+Metaskill is a [Claude Code](https://claude.ai/code) skill that creates AI agent teams, individual agents, and custom skills — all through a single `/metaskill` command.
 
 ```bash
 # Generate a full agent team for a project
@@ -22,42 +16,66 @@ Metaskill is a suite of [Claude Code](https://claude.ai/code) skills for creatin
 /metaskill data science pipeline with PyTorch
 /metaskill game dev with Unity and C#
 
-# Create individual agents and skills
-/create-agent security reviewer for Go microservices
-/create-skill deploy to staging with Docker
+# Create a single agent
+/metaskill a security reviewer agent for Go microservices
+/metaskill a code reviewer agent
+
+# Create a single skill
+/metaskill a deploy-to-staging skill with Docker
+/metaskill a lint-and-format skill
 ```
 
-`/metaskill` creates a self-contained project with a full AI team inside it. `/create-agent` and `/create-skill` let you add individual components to any existing project.
+One command. It detects your intent and routes to the right flow automatically.
 
 ---
 
-## Skills Overview
+## What It Does
 
-### `/metaskill` — Team Generator
+### Team Generation (default)
 
-Runs in 4 phases (research → build → credentials → verify) to create an entire agent team from scratch. See [How It Works](#how-it-works) below.
+When you describe a project type, Metaskill runs a 4-phase process:
 
-### `/create-agent` — Agent Builder
+```
+Phase 1: RESEARCH
+  ├── Web search: real-world team structures for your domain
+  ├── Web search: existing Claude Code agent configs on GitHub
+  ├── Web search: MCP servers relevant to your tech stack
+  └── Web search: best practices, linters, testing frameworks
 
-Interactively creates a single `.claude/agents/<name>.md` file. Guides you through:
-- Scope selection (project-level vs user-level)
+Phase 2: BUILD
+  ├── CLAUDE.md          — routing table + orchestration protocol
+  ├── .claude/agents/    — 4-6 agents (tech-lead + specialists + reviewer)
+  ├── .claude/skills/    — 2-4 workflow automation skills
+  ├── .claude/rules/     — coding standards for the primary language
+  └── .mcp.json          — MCP server configuration
+
+Phase 3: CREDENTIALS
+  └── Asks for any API keys/tokens needed by MCP servers
+      (always offers "skip / configure later")
+
+Phase 4: VERIFY
+  └── Lists all created files, validates .mcp.json, prints summary
+```
+
+The research phase is what makes each generated team genuinely useful — it's not a fixed template. It adapts to what actually matters in your domain right now.
+
+### Single Agent Creation
+
+When your request mentions "agent", "reviewer", or a specific role, Metaskill creates a single `.claude/agents/<name>.md` with:
 - Expert persona design
 - Frontmatter configuration (model, tools, permissions)
-- System prompt authoring with self-verification steps
+- System prompt with self-verification and Workflow Discipline built in
 
-### `/create-skill` — Skill Builder
+### Single Skill Creation
 
-Interactively creates a single `.claude/skills/<name>/SKILL.md` file. Guides you through:
-- Scope and invocation model (user-invocable, auto-invocable, or both)
-- Execution context (main conversation vs forked)
-- Dynamic context injection with shell commands
+When your request mentions "skill", "command", or "slash command", Metaskill creates a single `.claude/skills/<name>/SKILL.md` with:
+- Scope and invocation model configuration
+- Dynamic context injection
 - Argument handling and tool access
 
 ---
 
-## What Gets Generated
-
-> The following applies to `/metaskill`. For `/create-agent` and `/create-skill`, a single file is generated interactively.
+## What Gets Generated (Team Mode)
 
 ```
 ios-app-agents/
@@ -95,55 +113,27 @@ The `tech-lead` agent breaks the task down and delegates to specialists. You sup
 curl -fsSL https://raw.githubusercontent.com/xvirobotics/metaskill/main/install.sh | bash
 ```
 
-This installs all three skills (`/metaskill`, `/create-agent`, `/create-skill`) to `~/.claude/skills/`.
+This installs `/metaskill` to `~/.claude/skills/metaskill/`.
 
 Or manually:
 
 ```bash
-# Install all skills
-mkdir -p ~/.claude/skills/{metaskill,create-agent,create-skill}
+mkdir -p ~/.claude/skills/metaskill/flows
 
 curl -fsSL https://raw.githubusercontent.com/xvirobotics/metaskill/main/skill/SKILL.md \
   -o ~/.claude/skills/metaskill/SKILL.md
 
-curl -fsSL https://raw.githubusercontent.com/xvirobotics/metaskill/main/skills/create-agent/SKILL.md \
-  -o ~/.claude/skills/create-agent/SKILL.md
+curl -fsSL https://raw.githubusercontent.com/xvirobotics/metaskill/main/skill/flows/team.md \
+  -o ~/.claude/skills/metaskill/flows/team.md
 
-curl -fsSL https://raw.githubusercontent.com/xvirobotics/metaskill/main/skills/create-skill/SKILL.md \
-  -o ~/.claude/skills/create-skill/SKILL.md
+curl -fsSL https://raw.githubusercontent.com/xvirobotics/metaskill/main/skill/flows/agent.md \
+  -o ~/.claude/skills/metaskill/flows/agent.md
+
+curl -fsSL https://raw.githubusercontent.com/xvirobotics/metaskill/main/skill/flows/skill.md \
+  -o ~/.claude/skills/metaskill/flows/skill.md
 ```
 
 **Requirements:** [Claude Code](https://claude.ai/code) CLI installed and authenticated.
-
----
-
-## How It Works
-
-Metaskill runs in 4 phases inside an isolated Claude Code subagent:
-
-```
-Phase 1: RESEARCH
-  ├── Web search: real-world team structures for your domain
-  ├── Web search: existing Claude Code agent configs on GitHub
-  ├── Web search: MCP servers relevant to your tech stack
-  └── Web search: best practices, linters, testing frameworks
-
-Phase 2: BUILD
-  ├── CLAUDE.md          — routing table + orchestration protocol
-  ├── .claude/agents/    — 4-6 agents (tech-lead + specialists + reviewer)
-  ├── .claude/skills/    — 2-4 workflow automation skills
-  ├── .claude/rules/     — coding standards for the primary language
-  └── .mcp.json          — MCP server configuration
-
-Phase 3: CREDENTIALS
-  └── Asks for any API keys/tokens needed by MCP servers
-      (always offers "skip / configure later")
-
-Phase 4: VERIFY
-  └── Lists all created files, validates .mcp.json, prints summary
-```
-
-The research phase is what makes each generated team genuinely useful — it's not a fixed template. It adapts to what actually matters in your domain right now.
 
 ---
 
@@ -174,6 +164,7 @@ Every generated team follows this pattern:
 - Main Claude never implements directly for multi-step tasks — it delegates
 - Structured handoff documents between agents
 - Code reviewer is a mandatory quality gate
+- All agents follow built-in Workflow Discipline: plan-first, re-plan on failure, verify before done, autonomous execution
 
 ---
 
@@ -207,24 +198,27 @@ See the [`examples/`](examples/) directory:
 
 ## Project Structure
 
-| File | Description |
-|------|-------------|
-| [`skill/SKILL.md`](skill/SKILL.md) | `/metaskill` — the team generator skill |
-| [`skills/create-agent/SKILL.md`](skills/create-agent/SKILL.md) | `/create-agent` — single agent builder |
-| [`skills/create-skill/SKILL.md`](skills/create-skill/SKILL.md) | `/create-skill` — single skill builder |
-| [`install.sh`](install.sh) | Installer for all three skills |
-| [`examples/`](examples/) | Example generated outputs |
+```
+metaskill/
+├── skill/
+│   ├── SKILL.md              ← /metaskill entry point (intent routing)
+│   └── flows/
+│       ├── team.md           ← full agent team generation flow
+│       ├── agent.md          ← single agent creation flow
+│       └── skill.md          ← single skill creation flow
+├── install.sh                ← installer
+└── examples/                 ← example generated outputs
+```
 
 ---
 
 ## Contributing
 
-PRs welcome. Each skill is a single markdown file — edit directly and test.
+PRs welcome. The skill is modular — edit the specific flow file for what you want to improve:
 
-To improve:
 1. Fork the repo
-2. Edit the relevant `SKILL.md`
-3. Test in Claude Code (`/metaskill`, `/create-agent`, or `/create-skill`)
+2. Edit the relevant file in `skill/flows/`
+3. Test in Claude Code with `/metaskill`
 4. Submit a PR with a before/after example
 
 ---
