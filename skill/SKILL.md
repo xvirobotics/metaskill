@@ -2,7 +2,7 @@
 name: metaskill
 description: "The meta-skill: create AI agent teams, individual agents, or custom skills for any project. Use when the user wants to generate a complete .claude/ agent team, create a single agent, or create a single skill."
 user-invocable: true
-disable-model-invocation: true
+disable-model-invocation: false
 context: fork
 agent: general-purpose
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, WebSearch, WebFetch, AskUserQuestion
