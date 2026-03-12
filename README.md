@@ -195,6 +195,7 @@ The [`examples/`](examples/) directory contains **real, usable agent teams** gen
 | [`fullstack-web/`](examples/fullstack-web/) | React + Node.js + PostgreSQL | tech-lead, frontend-engineer, backend-engineer, devops-engineer, code-reviewer | build-and-test, deploy-preview, api-test |
 | [`ios-app/`](examples/ios-app/) | SwiftUI + Swift | tech-lead, ios-engineer, ui-designer, test-engineer, code-reviewer | build-and-test, run-simulator |
 | [`data-science/`](examples/data-science/) | Python + PyTorch | tech-lead, data-engineer, ml-engineer, analyst, code-reviewer | run-pipeline, evaluate-model, generate-report |
+| [`devops-infra/`](examples/devops-infra/) | Terraform + Kubernetes + GitHub Actions | tech-lead, infra-engineer, platform-engineer, cicd-engineer, sre-engineer, code-reviewer | plan-and-apply, deploy-service, incident-response |
 
 Try one:
 ```bash
